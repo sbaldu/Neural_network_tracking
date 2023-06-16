@@ -18,7 +18,8 @@ TEST_CASE("Test scalar product between two vector matrices") {
   Matrix<int> m1(v1);
   Matrix<int> m2(v2);
 
-  Matrix<int> product{m1 * m2};
+  Matrix<int> product{m1.transpose() * m2};
+  std::cout << product.size() << std::endl;
 
   CHECK(product.get(0, 0) == 735);
 }

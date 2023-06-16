@@ -36,13 +36,13 @@ public:
   void set_dim(int n_rows, int n_cols);
 
   // Setters for data
-  void set_data(int i, int j, T data);
-  void set_data(int index, T data);
-  void set_data(std::vector<T> data_vec);
+  inline void set_data(int i, int j, T data);
+  inline void set_data(int index, T data);
+  inline void set_data(std::vector<T> data_vec);
 
-  const T get(int i, int j) const;
+  inline const T get(int i, int j) const;
 
-  Matrix transpose();
+  inline Matrix transpose();
 
   T& operator[](int index);
   const T& operator[](int index) const;
@@ -136,7 +136,7 @@ void Matrix<T>::set_dim(int n_rows, int n_cols) {
 }
 
 template <typename T>
-void Matrix<T>::set_data(int i, int j, T data) {
+inline void Matrix<T>::set_data(int i, int j, T data) {
   int index{j + m_ncols * i};
   try {
     if (index < m_ncols * m_nrows) {
@@ -150,7 +150,7 @@ void Matrix<T>::set_data(int i, int j, T data) {
 }
 
 template <typename T>
-void Matrix<T>::set_data(int index, T data) {
+inline void Matrix<T>::set_data(int index, T data) {
   try {
     if (index < m_ncols * m_nrows) {
       m_data[index] = data;
@@ -163,17 +163,17 @@ void Matrix<T>::set_data(int index, T data) {
 }
 
 template <typename T>
-void Matrix<T>::set_data(std::vector<T> data_vec) {
+inline void Matrix<T>::set_data(std::vector<T> data_vec) {
   m_data = std::move(data_vec);
 }
 
 template <typename T>
-const T Matrix<T>::get(int i, int j) const {
-  return m_data.at(j + m_ncols * i);
+inline const T Matrix<T>::get(int i, int j) const {
+  return m_data[j + m_ncols * i];
 }
 
 template <typename T>
-Matrix<T> Matrix<T>::transpose() {
+inline Matrix<T> Matrix<T>::transpose() {
   Matrix<T> matrix(this->m_ncols, this->m_nrows);
 
   for (int i{}; i < this->m_nrows; ++i) {
@@ -254,6 +254,7 @@ Matrix<T> operator*(const Matrix<T>& m1, const Matrix<E>& m2) {
   } catch (int num) {
     std::cout << "The two matrices can't be multiplied because their dimensions are not compatible. \n";
   }
+  
   for (int i{}; i < m1.m_nrows; ++i) {
     for (int j{}; j < m2.m_ncols; ++j) {
       T sum{};
@@ -271,6 +272,14 @@ template <typename T>
 std::vector<T> operator*(const Matrix<T>& matrix, const std::vector<T>& vec) {
   std::vector<T> result_vec(matrix.m_nrows);
 
+  try {
+    if (matrix.m_ncols != vec.size()) {
+      throw(0);
+    }
+  } catch (int num) {
+    std::cout << "The matrix and the vector can't be multiplied because their dimensions are not compatible. \n";
+  }
+
   for (int i{}; i < matrix.m_nrows; ++i) {
     T sum{};
     for (int j{}; j < matrix.m_ncols; ++j) {
@@ -285,6 +294,14 @@ std::vector<T> operator*(const Matrix<T>& matrix, const std::vector<T>& vec) {
 template <typename T, std::convertible_to<T> E>
 std::vector<T> operator*(const Matrix<T>& matrix, const std::vector<E>& vec) {
   std::vector<T> result_vec(matrix.m_nrows);
+
+  try {
+    if (matrix.m_ncols != vec.size()) {
+      throw(0);
+    }
+  } catch (int num) {
+    std::cout << "The matrix and the vector can't be multiplied because their dimensions are not compatible. \n";
+  }
 
   for (int i{}; i < matrix.m_nrows; ++i) {
     T sum{};

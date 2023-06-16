@@ -2,15 +2,23 @@
 #ifndef ErrorFunction_h
 #define ErrorFunction_h
 
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_expression.hpp>
+
 #include <cmath>
 #include <memory>
 #include <vector>
 
-#include "../DataFormats/Matrix.hpp"
+/* #include "../DataFormats/Matrix.hpp" */
 #include "Layer.hpp"
 
 template <typename T>
 using shared = std::shared_ptr<T>;
+
+template <typename T>
+using Matrix = boost::numeric::ublas::matrix<T>;
+
+using boost::numeric::ublas::trans;
 
 template <typename T, typename W, template <typename E> typename Activator>
 struct MeanSquaredError {
@@ -44,9 +52,11 @@ struct MeanSquaredError {
       int N{current_layer->size()};
       std::vector<double> delta(N);
 
+	  auto next_layer_delta{grad(expected_values, next_layer, nullptr, nullptr)};
       for (int node_index{}; node_index < N; ++node_index) {
+		Matrix<W> nlm_transpose{trans(*next_layer_matrix)};
         delta[node_index] =
-            act.grad((*current_layer)[node_index]) * (*next_layer_matrix * next_layer->nodes())[node_index];
+		  act.grad((*current_layer)[node_index]) * (nlm_transpose * next_layer_delta)[node_index];
       }
 
       return delta;

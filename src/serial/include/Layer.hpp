@@ -10,8 +10,6 @@
 #include <sstream>
 #include <vector>
 
-#include "../DataFormats/Matrix.hpp"
-
 template <typename T>
 class Layer{
   private:
@@ -26,7 +24,7 @@ class Layer{
 
 	void load(std::stringstream& stream);
 
-	inline void normalize();
+	/* inline void normalize(); */
 
 	// Getters
 	const std::vector<T>& nodes() const;
@@ -104,7 +102,7 @@ const std::vector<T>& Layer<T>::nodes() const {
 
 template <typename T>
 const int Layer<T>::size() const {
-  return m_nodes.size();
+  return n_nodes;
 }
 
 template <typename T>
@@ -131,14 +129,11 @@ std::ostream& operator<<(std::ostream& out, const Layer<T>& layer) {
   return out;
 }
 
-template <typename T>
-inline void Layer<T>::normalize() {
-  T min{*std::min_element(m_nodes.begin(), m_nodes.end())};
-  T max{*std::max_element(m_nodes.begin(), m_nodes.end())};
-
-  for (auto& x : m_nodes) {
-	x /= (max - min);
-  }
-}
+/* template <typename T> */
+/* inline void Layer<T>::normalize() { */
+/*   for (auto& x : m_nodes) { */
+/* 	x /= (max - min); */
+/*   } */
+/* } */
 
 #endif

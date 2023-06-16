@@ -6,11 +6,11 @@
 
 int main() {
   double eta{0.05};
-  Network<int, double, Sigmoid, MeanSquaredError> net(2, {2, 1});
+  Network<int, double, Sigmoid, MeanSquaredError> net(3, {2, 3, 1});
   std::vector<std::vector<int>> inputs{{0, 0}, {0, 1}, {1, 0}, {1, 1}};
   std::vector<std::vector<int>> targets{{0}, {1}, {1}, {0}};
 
-  int n_epochs{1000};
+  int n_epochs{50000};
   for (int epoch{}; epoch < n_epochs; ++epoch) {
 	for (int i{}; i < inputs.size(); ++i) {
 	  net.load_input_layer(inputs[i]);

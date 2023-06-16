@@ -10,7 +10,7 @@ int main() {
   std::vector<std::vector<int>> inputs{{0, 0}, {0, 1}, {1, 0}, {1, 1}};
   std::vector<std::vector<int>> targets{{0}, {1}, {1}, {1}};
 
-  int n_epochs{100};
+  int n_epochs{300};
   for (int epoch{}; epoch < n_epochs; ++epoch) {
 	for (int i{}; i < inputs.size(); ++i) {
 	  net.load_input_layer(inputs[i]);
